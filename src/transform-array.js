@@ -13,9 +13,37 @@ const { NotImplementedError } = require('../lib');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  *
  */
-function transform(/* arr */) {
-  // Remove line below and write your code here
-  throw new NotImplementedError('Not implemented');
+function transform(arr) {
+  if (!Array.isArray(arr)) {
+    throw new Error(`'arr' parameter must be an instance of the Array!`);
+  }
+  let result = [];
+  for (let i = 0; i < arr.length; i++) {
+    switch (arr[i]) {
+      case '--discard-next':
+        result.push(undefined, undefined);
+        i++;
+        break;
+      case '--discard-prev':
+        result.push(undefined);
+        result[i - 1] = undefined;
+        break;
+      case '--double-next':
+        if (i + 1 < arr.length) {
+          result.push(arr[i + 1]);
+        }
+        break;
+      case '--double-prev':
+        if (result[i - 1] !== undefined) {
+          result.push(arr[i - 1]); 
+        }
+        break;
+      default:
+        result.push(arr[i]);
+        break;
+    }
+  }
+  return result.filter((item) => item !== undefined);
 }
 
 module.exports = {
